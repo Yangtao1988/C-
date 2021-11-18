@@ -4,8 +4,8 @@ using namespace std;
 
 int main()
 {
+	system("color 02");
 	cout << "hello world!"<< endl;
 
-	system("pause>0")
 	return 0;
 }

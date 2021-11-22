@@ -1,12 +1,14 @@
 #include <iostream>
 #include <vector>
-//#include <algorithm>
+#include <algorithm>
 #include <iterator>
 
-using namespace std;
+using std::cout;
+using std::endl;
+using std::vector;
 
 template<class InputIterator, class T>
-InputIterator find(InputIterator first, InputIterator last, const T& val)
+InputIterator find_1(InputIterator first, InputIterator last, const T& val)
 {
   while (first!=last) {
     if (*first==val) return first;
@@ -62,7 +64,7 @@ ForwardIterator1 find_end (ForwardIterator1 first1, ForwardIterator1 last1,
 }
 
 template<class InputIterator, class ForwardIterator>
-InputIterator find_first_of ( InputIterator first1, InputIterator last1,
+InputIterator find_first_of_1 ( InputIterator first1, InputIterator last1,
                                 ForwardIterator first2, ForwardIterator last2)
 {
   while (first1!=last1) {
@@ -79,43 +81,74 @@ bool comp_case_insensitive (char c1, char c2) {
   return (std::tolower(c1)==std::tolower(c2));
 }
 
+template <class ForwardIterator>
+ForwardIterator adjacent_find_1 (ForwardIterator first, ForwardIterator last)
+{
+  if (first != last)
+  {
+    ForwardIterator next=first; ++next;
+    while (next != last) {
+      if (*first == *next)     // or: if (pred(*first,*next)), for version (2)
+        return first;
+      ++first; ++next;
+    }
+  }
+  return last;
+}
+
 int main()
 {
 	system("color 02");
 
-	int myints[5] = {15, 23, 31, 41, 54};
+	// int myints[5] = {15, 23, 31, 41, 54};
 
-	vector<int> myvector(begin(myints), end(myints));
+	// vector<int> myvector(begin(myints), end(myints));
 
-	if (vector<int>::iterator it = find(myvector.begin(), myvector.end(),30);
-			it != myvector.end())
-		cout << "Element found in myvector: " << *it << '\n';
-	else
-		cout << "Element not found in myvector\n";
+	// if (vector<int>::iterator it = find_1(myvector.begin(), myvector.end(),30);
+	// 		it != myvector.end())
+	// 	cout << "Element found in myvector: " << *it << '\n';
+	// else
+	// 	cout << "Element not found in myvector\n";
 
 
-	if(vector<int>::iterator it = find_if(myvector.begin(), myvector.end(),IsOdd);
-			it != myvector.end())
-		cout << "The first even value is " << *it << '\n';
+	// if(vector<int>::iterator it = find_if(myvector.begin(), myvector.end(),IsOdd);
+	// 		it != myvector.end())
+	// 	cout << "The first even value is " << *it << '\n';
 
-	if(vector<int>::iterator it = find_if_not
-			(myvector.begin(), myvector.end(),[](int i){return i%3;});
-			it != myvector.end())
-		cout << "The first even value is " << *it << '\n';
+	// if(vector<int>::iterator it = find_if_not
+	// 		(myvector.begin(), myvector.end(),[](int i){return i%3;});
+	// 		it != myvector.end())
+	// 	cout << "The first even value is " << *it << '\n';
 
-	int mychars[] = {'E', 'G', 'Y', 'C', 'C', 'C'};
-	std::vector<char> haystack(begin(mychars),end(mychars));
-	std::vector<char>::iterator it;
+	// int mychars[] = {'E', 'G', 'Y', 'C', 'C', 'C'};
+	// std::vector<char> haystack(begin(mychars),end(mychars));
+	// std::vector<char>::iterator it;
 
-	int needle[] = {'A', 'B', 'C'};
+	// int needle[] = {'A', 'B', 'C'};
 
 	// using default comparison:
-	it = find_first_of(haystack.begin(), haystack.end(),
-		 begin(needle) ,end(needle),comp_case_insensitive);
+	// it = find_first_of(haystack.begin(), haystack.end(),
+	// 	 begin(needle) ,end(needle),comp_case_insensitive);
 
-	if (it != haystack.end())
-		std::cout << "The first match is: " << *it << '\n';
+	// if (it != haystack.end())
+	// 	std::cout << "The first match is: " << *it << '\n';
+
+    
+  int myints[] = {5,5,30,30,30,10,10,20};
+  vector<int> myvector (myints,myints+8);
+  vector<int>::iterator it;
+
+  // using default comparison:
+  it = adjacent_find (myvector.begin(), myvector.end());
+
+  if (it!=myvector.end())
+    std::cout << "the first pair of repeated elements are: " << *it << '\n';
+
+  it = adjacent_find(++it, myvector.end(), [](int i,int j){return (i == j);});
+
+  if (it!=myvector.end())
+    std::cout << "the second pair of repeated elements are: " << *it << '\n';
 
 
-	return 0;
+    return 0;
 }
